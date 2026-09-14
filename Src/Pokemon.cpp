@@ -19,7 +19,7 @@ Pokemon::Pokemon(const Pokemon& anotherPokemon)
 }
 
 Pokemon::~Pokemon() {
-    std::cout << "Destructeur : " << name << std::endl;
+    //std::cout << "Destructeur : " << name << std::endl;
 }
 
 int Pokemon::getId() const {return id;}

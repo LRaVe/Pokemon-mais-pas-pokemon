@@ -7,6 +7,7 @@ class Pokemon_Attack:public SetOfPokemon
 {
     private:
         const int maxPokemon = 6;
+        
     public:
         Pokemon_Attack();
         ~Pokemon_Attack();
