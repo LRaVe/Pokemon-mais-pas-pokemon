@@ -24,12 +24,12 @@ endif()
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 set(SOURCES
-    src/main.cpp
-    src/Pokemon.cpp
-    src/Pokedex.cpp
-    src/SetOfPokemon.cpp
-    src/Pokemon_Party.cpp
-    src/Pokemon_Attack.cpp
+    Src/main.cpp
+    Src/Pokemon.cpp
+    Src/Pokedex.cpp
+    Src/SetOfPokemon.cpp
+    Src/Pokemon_Party.cpp
+    Src/Pokemon_Attack.cpp
 )
 
 add_executable(${PROJECT_NAME} ${SOURCES})
@@ -57,5 +57,5 @@ add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
 )
 
 target_include_directories(${PROJECT_NAME} PRIVATE
-    ${CMAKE_SOURCE_DIR}/inc
+    ${CMAKE_SOURCE_DIR}/Inc
 )
