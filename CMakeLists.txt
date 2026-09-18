@@ -30,6 +30,9 @@ set(SOURCES
     Src/SetOfPokemon.cpp
     Src/Pokemon_Party.cpp
     Src/Pokemon_Attack.cpp
+    Src/Interface.cpp
+    Src/Game.cpp
+    Src/Game_states/States.cpp
 )
 
 add_executable(${PROJECT_NAME} ${SOURCES})

@@ -11,21 +11,21 @@ Pokemon_Attack::~Pokemon_Attack() {
 
 
 void Pokemon_Attack::addPokemon(const Pokemon& pokemon) {
-    if (pokemons.size() <= maxPokemon) {
+    if (pokemons.size() < maxPokemon) {
         pokemons.push_back(pokemon);
     } else {
-        throw std::runtime_error("Cannot add more than 6 Pokemons.");
+        throw std::length_error("Cannot add more than 6 Pokemons.");
     }
 }
 
-void Pokemon_Attack::removePokemonByName(const string& name){
+bool Pokemon_Attack::removePokemonByName(const string& name){
     for (auto it = pokemons.begin(); it != pokemons.end(); ++it) {
         if (it->getName() == name) {
             pokemons.erase(it);
-            return;
+            return true;
         }
     }
-    throw std::runtime_error(name + " is not in the attack set.");
+    return false;
 }
 
 

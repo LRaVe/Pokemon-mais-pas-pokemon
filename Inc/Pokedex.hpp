@@ -1,3 +1,4 @@
+#pragma once
 #include "SetOfPokemon.hpp"
 
 #include <iostream>
@@ -27,4 +28,5 @@ class Pokedex : public SetOfPokemon {
         }
         Pokemon getByIndex(int index) override;
         Pokemon getByName(const std::string& name) override;
+        std::string getPokemonImage(int index) const;
     };

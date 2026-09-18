@@ -4,6 +4,7 @@
 #include <fstream>
 #include <sstream>
 #include <stdexcept>
+#include <vector>
 
 Pokedex* Pokedex::instance = nullptr;
 
@@ -56,4 +57,8 @@ Pokemon Pokedex::getByName(const std::string& name) {
         }
     }
     throw std::runtime_error("Pokemon with name " + name + " not found.");
+}
+
+std::string Pokedex::getPokemonImage(int index) const {
+    return "../../Ressources/pokemon/" + std::to_string(index) + ".png";
 }

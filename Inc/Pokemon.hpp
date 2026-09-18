@@ -13,6 +13,7 @@ class Pokemon {
         double defense;
         int generation;
         static int nbPokemon;
+        string imagePath;
     public:
         Pokemon()=delete;
         Pokemon(const int &id, const string &name, const double &hitPoint, const double &attack, const double &defense, const int &generation);

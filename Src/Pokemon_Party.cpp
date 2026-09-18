@@ -20,7 +20,7 @@ void Pokemon_Party::removePokemonByName(const string& name){
             return;
         }
     }
-    throw std::runtime_error(name + " is not in the party.");
+    throw std::out_of_range(name + " is not in the party.");
 }
 
 void Pokemon_Party::addPokemonToAttackSet(const Pokemon& pokemon) {
@@ -33,7 +33,7 @@ void Pokemon_Party::addPokemonToAttackSet(const Pokemon& pokemon) {
             return;
         }
     }
-    throw std::runtime_error(pokemon.getName() + " is not in the party.");
+    throw std::out_of_range(pokemon.getName() + " is not in the party.");
 }
 
 void Pokemon_Party::removePokemonFromAttackSetByName(const string& name) {

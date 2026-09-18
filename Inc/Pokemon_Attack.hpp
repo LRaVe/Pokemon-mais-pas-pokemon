@@ -13,7 +13,7 @@ class Pokemon_Attack:public SetOfPokemon
         ~Pokemon_Attack();
 
         void addPokemon(const Pokemon& pokemon);
-        void removePokemonByName(const string& name);
+        bool removePokemonByName(const string& name);
 
         std::vector<Pokemon> getPokemons() const;
 
