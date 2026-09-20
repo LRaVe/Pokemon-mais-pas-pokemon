@@ -12,17 +12,12 @@ Interface::Interface() {
     {
         std::cerr << "Could not load font.\n";
     }
-    sf::Text text(font, "Salut!", 24);
 }
     
 
 
-void Interface::render(sf::RenderWindow& window) {
-    sf::Font font;
-    if (!font.openFromFile(TasteBreadHD))
-    {
-        std::cerr << "Could not load font.\n";
-    }
-    sf::Text text(font, "Salut!", 24);
-    window.draw(text);
+void Interface::render(sf::RenderWindow&) {
+    
+
+    
 }

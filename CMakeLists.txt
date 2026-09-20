@@ -32,7 +32,14 @@ set(SOURCES
     Src/Pokemon_Attack.cpp
     Src/Interface.cpp
     Src/Game.cpp
-    Src/Game_states/States.cpp
+    Src/Game_states/TitleState.cpp
+    Src/Game_states/StarterState.cpp
+    Src/Game_states/MainMenuState.cpp
+    Src/Game_states/PokedexState.cpp
+    Src/Game_states/PartyState.cpp
+    Src/Game_states/BattleState.cpp
+    Src/Game_states/ExitState.cpp
+    Src/GameSprite.cpp
 )
 
 add_executable(${PROJECT_NAME} ${SOURCES})

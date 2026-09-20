@@ -12,9 +12,10 @@ class Game
 private:
     Pokedex* pokedex;
     Pokemon_Party party;   
-    std::unique_ptr<GameState> currentState;
     sf::RenderWindow window;
     Interface interface;
+    std::unique_ptr<GameState> currentState;
+
 
 
 public:

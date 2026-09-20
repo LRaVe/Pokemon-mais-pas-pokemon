@@ -38,6 +38,8 @@ int Pokemon::getGeneration() const {return generation;}
 
 int Pokemon::getNbPokemon() const {return nbPokemon;}
 
+string Pokemon::getImagePath() const {return imagePath;}
+
 
 void Pokemon::displayInfo() const {
     std::cout << "ID: " << id << std::endl;

@@ -6,4 +6,5 @@ public:
     Interface();
     void render(sf::RenderWindow& window);
 private:
+
 };

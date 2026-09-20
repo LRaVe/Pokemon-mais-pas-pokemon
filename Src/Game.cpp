@@ -12,13 +12,16 @@
 
 
 Game::Game()
-        : pokedex(Pokedex::getInstance(pokedexCSV)),
-            party(),
-            currentState(std::make_unique<TitleState>()),
-            interface()
+    : pokedex(Pokedex::getInstance(pokedexCSV)),
+      party(),
+      window(),
+      interface(),
+      currentState(std::make_unique<StarterState>())
 {
-    party.addPokemon(pokedex->getByName("Pikachu"));
-    window.create(sf::VideoMode({1000, 800}), "SFML works!");
+    window.create(sf::VideoMode({1600, 900}),
+    "Pokemon",
+    sf::Style::Default,
+    sf::State::Windowed);
 
     
 
@@ -46,7 +49,7 @@ void Game::run(){
             currentState->handleEvent(*event);
         }
         
-        window.clear();
+        window.clear(sf::Color::White);
         currentState->render(window, interface);
         window.display();
     }
