@@ -1,12 +1,17 @@
 #include "Game_states/StarterState.hpp"
+#include "Game_states/BattleState.hpp"
 
 #include "Interface.hpp"
+#include "References.hpp"
+#include "Game.hpp"
 #include <array>
 #include <SFML/Graphics.hpp>
 #include <stdexcept>
+#include <iostream>
+
 
 StarterState::StarterState()
-    : font(),
+    : font(GoldyBurst),
     ChooseText(font, "Choose your starter Pokemon!", 48),
      starterPokemonSprites{
           std::make_unique<GameSprite>("../../Ressources/pokemon/1.png"),
@@ -20,19 +25,58 @@ StarterState::StarterState()
     {
         sprite->setScale({3.f, 3.f});
     }
-    if (!font.openFromFile("../../Ressources/Taste Bread HD.otf")) {
+    if (!font.openFromFile(GoldyBurst)) {
         // Handle error
+        throw std::runtime_error("Failed to open font file");
     }
-    ChooseText.setFont(font);
-    ChooseText.setString("Choose your starter Pokémon!");
-    ChooseText.setCharacterSize(48);
     ChooseText.setFillColor(sf::Color::Black);
-    ChooseText.setPosition({656.f, 250.f});
+    ChooseText.setFont(font);
+    ChooseText.setCharacterSize(48);
+    ChooseText.setString("Choose your starter Pokemon!");
+    ChooseText.setPosition({328.f, 250.f});
 }
 
 void StarterState::handleEvent(const sf::Event& event)
 {
-    (void)event;
+    if (const auto* mouseButton = event.getIf<sf::Event::MouseButtonPressed>())
+    {
+        if (mouseButton->button == sf::Mouse::Button::Left)
+        {
+            const sf::Vector2f mousePos(
+                static_cast<float>(mouseButton->position.x),
+                static_cast<float>(mouseButton->position.y));
+
+            for (const std::unique_ptr<GameSprite>& sprite : starterPokemonSprites)
+            {
+                if (sprite->contains(mousePos))
+                {
+                    isPokemonSelected = true;
+                    std::cout << "Pokemon selected!" << std::endl;
+                    
+                    break;
+                }
+            }
+        }
+
+    
+    }
+    if (const auto* mouseMove = event.getIf<sf::Event::MouseMoved>())
+    {
+        sf::Vector2f mousePos(
+            static_cast<float>(mouseMove->position.x),
+            static_cast<float>(mouseMove->position.y)
+        );
+
+        for (auto& sprite : starterPokemonSprites)
+        {
+            sprite->setHighlighted(sprite->contains(mousePos));
+        }
+    }
+
+    if (isPokemonSelected && action)
+    {
+        action(std::make_unique<BattleState>()); // Appel du changement d'état vers BattleState
+    }
 }
 
 void StarterState::render(sf::RenderWindow& window, Interface& interface)
@@ -45,4 +89,6 @@ void StarterState::render(sf::RenderWindow& window, Interface& interface)
     {
         sprite->draw(window);
     }
+
+    
 }

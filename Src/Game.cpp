@@ -18,6 +18,11 @@ Game::Game()
       interface(),
       currentState(std::make_unique<StarterState>())
 {
+    currentState->setAction([this](std::unique_ptr<GameState> newState) {
+        this->changeState(std::move(newState));
+    });
+
+
     window.create(sf::VideoMode({1600, 900}),
     "Pokemon",
     sf::Style::Default,
@@ -38,6 +43,9 @@ const GameState& Game::getCurrentState() const {
 
 void Game::changeState(std::unique_ptr<GameState> state) {
     currentState = std::move(state);
+    currentState->setAction([this](std::unique_ptr<GameState> newState) {
+        changeState(std::move(newState));
+    });
 }
 
 void Game::run(){

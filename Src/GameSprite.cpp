@@ -28,6 +28,10 @@ void GameSprite::setScale(sf::Vector2f scale) {
 }
 
 
+bool GameSprite::contains(sf::Vector2f point) const {
+    return sprite.getGlobalBounds().contains(point);
+}
+
 void GameSprite::draw(sf::RenderWindow& window) {
     if (isHighlighted) {
         // Draw a highlight rectangle behind the sprite
@@ -40,3 +44,4 @@ void GameSprite::draw(sf::RenderWindow& window) {
     
     window.draw(sprite);
 }
+
