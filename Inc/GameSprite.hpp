@@ -8,12 +8,14 @@ class GameSprite {
         sf::Sprite sprite;
         bool isHighlighted = false;
     public:
+        virtual ~GameSprite() = default;
         GameSprite()=delete;
         GameSprite(const std::string& imagePath);
-        void setScale(sf::Vector2f scale);
+        virtual void setScale(sf::Vector2f scale);
 
-        bool contains(sf::Vector2f point) const;
+        virtual bool contains(sf::Vector2f point) const;
+        sf::FloatRect getGlobalBounds() const;
         void setHighlighted(bool highlighted);
-        void setPosition(sf::Vector2f position);
-        void draw(sf::RenderWindow& window);
+        virtual void setPosition(sf::Vector2f position);
+        virtual void draw(sf::RenderWindow& window);
 };

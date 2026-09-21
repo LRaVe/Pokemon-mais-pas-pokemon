@@ -2,6 +2,7 @@
 
 #include "GameState.hpp"
 #include "GameSprite.hpp"
+#include "Pokemon_Party.hpp"
 #include <array>
 #include <memory>
 #include <SFML/Graphics.hpp>
@@ -13,8 +14,10 @@ private:
     sf::Text ChooseText;
     std::array<std::unique_ptr<GameSprite>, 3> starterPokemonSprites;
     bool isPokemonSelected = false;
+    Pokemon_Party& party;
 public:
-    StarterState();
+    StarterState(Pokemon_Party& party);
     void handleEvent(const sf::Event& event) override;
     void render(sf::RenderWindow& window, Interface& interface) override;
+    void update() override;
 };

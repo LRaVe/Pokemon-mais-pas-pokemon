@@ -27,6 +27,10 @@ void GameSprite::setScale(sf::Vector2f scale) {
     sprite.setScale(scale);
 }
 
+sf::FloatRect GameSprite::getGlobalBounds() const {
+    return sprite.getGlobalBounds();
+}
+
 
 bool GameSprite::contains(sf::Vector2f point) const {
     return sprite.getGlobalBounds().contains(point);
@@ -44,4 +48,3 @@ void GameSprite::draw(sf::RenderWindow& window) {
     
     window.draw(sprite);
 }
-

@@ -50,6 +50,10 @@ Pokemon Pokedex::getByIndex(int index) {
     throw std::runtime_error("Pokemon with id " + std::to_string(index) + " not found.");
 }
 
+Pokemon Pokedex::getByPosition(std::size_t position) const {
+    return pokemons.at(position);
+}
+
 Pokemon Pokedex::getByName(const std::string& name) {
     for (const auto& pokemon : pokemons) {
         if (pokemon.getName() == name) {
@@ -60,5 +64,9 @@ Pokemon Pokedex::getByName(const std::string& name) {
 }
 
 std::string Pokedex::getPokemonImage(int index) const {
-    return "../../Ressources/pokemon/" + std::to_string(index) + ".png";
+    return "Ressources/pokemon/" + std::to_string(index) + ".png";
+}
+
+int Pokedex::getTotalPokemon() const {
+    return static_cast<int>(pokemons.size());
 }

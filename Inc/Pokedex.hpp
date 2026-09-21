@@ -27,6 +27,8 @@ class Pokedex : public SetOfPokemon {
             std::cout << "*** Destructeur du Pokedex ***" << std::endl;
         }
         Pokemon getByIndex(int index) override;
+        Pokemon getByPosition(std::size_t position) const;
         Pokemon getByName(const std::string& name) override;
         std::string getPokemonImage(int index) const;
+        int getTotalPokemon() const;
     };

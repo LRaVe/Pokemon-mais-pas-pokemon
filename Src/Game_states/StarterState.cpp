@@ -1,5 +1,5 @@
 #include "Game_states/StarterState.hpp"
-#include "Game_states/BattleState.hpp"
+#include "Game_states/ExplorationState.hpp"
 
 #include "Interface.hpp"
 #include "References.hpp"
@@ -10,13 +10,14 @@
 #include <iostream>
 
 
-StarterState::StarterState()
+StarterState::StarterState(Pokemon_Party& party)
     : font(GoldyBurst),
     ChooseText(font, "Choose your starter Pokemon!", 48),
      starterPokemonSprites{
-          std::make_unique<GameSprite>("../../Ressources/pokemon/1.png"),
-          std::make_unique<GameSprite>("../../Ressources/pokemon/4.png"),
-          std::make_unique<GameSprite>("../../Ressources/pokemon/7.png")}
+          std::make_unique<GameSprite>("Ressources/pokemon/1.png"),
+          std::make_unique<GameSprite>("Ressources/pokemon/4.png"),
+          std::make_unique<GameSprite>("Ressources/pokemon/7.png")},
+     party(party)
 {
     starterPokemonSprites[0]->setPosition({328.f, 306.f});
     starterPokemonSprites[1]->setPosition({656.f, 306.f});
@@ -75,7 +76,7 @@ void StarterState::handleEvent(const sf::Event& event)
 
     if (isPokemonSelected && action)
     {
-        action(std::make_unique<BattleState>()); // Appel du changement d'état vers BattleState
+        action(std::make_unique<ExplorationState>(party));
     }
 }
 
@@ -91,4 +92,8 @@ void StarterState::render(sf::RenderWindow& window, Interface& interface)
     }
 
     
+}
+
+void StarterState::update()
+{
 }

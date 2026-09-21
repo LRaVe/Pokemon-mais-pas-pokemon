@@ -6,7 +6,7 @@ int Pokemon::nbPokemon=0;
 
 Pokemon::Pokemon(const int &id, const string &name, const double &hitPoint, const double &attack, const double &defense, const int &generation) : id(id), name(name), hitPoint(hitPoint), attack(attack), defense(defense), generation(generation) {
     nbPokemon++;
-    imagePath = "../../Ressources/pokemon/" + std::to_string(id) + ".png";
+    imagePath = "Ressources/pokemon/" + std::to_string(id) + ".png";
 }
 
 Pokemon::Pokemon(const Pokemon& anotherPokemon)
@@ -75,5 +75,4 @@ void Pokemon::damage(Pokemon& target) const{
     }
     
 }
-
 

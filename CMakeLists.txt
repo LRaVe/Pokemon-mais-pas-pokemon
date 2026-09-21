@@ -39,7 +39,9 @@ set(SOURCES
     Src/Game_states/PartyState.cpp
     Src/Game_states/BattleState.cpp
     Src/Game_states/ExitState.cpp
+    Src/Game_states/ExplorationState.cpp
     Src/GameSprite.cpp
+    Src/Button.cpp
 )
 
 add_executable(${PROJECT_NAME} ${SOURCES})
@@ -58,6 +60,9 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
 )
 
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+        "${CMAKE_SOURCE_DIR}/Ressources"
+        "$<TARGET_FILE_DIR:${PROJECT_NAME}>/Ressources"
     COMMAND ${CMAKE_COMMAND} -E copy_directory
         "${VCPKG_INSTALLED_DIR}/bin"
         "$<TARGET_FILE_DIR:${PROJECT_NAME}>"

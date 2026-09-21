@@ -16,7 +16,7 @@ Game::Game()
       party(),
       window(),
       interface(),
-      currentState(std::make_unique<StarterState>())
+      currentState(std::make_unique<StarterState>(party))
 {
     currentState->setAction([this](std::unique_ptr<GameState> newState) {
         this->changeState(std::move(newState));
@@ -56,6 +56,8 @@ void Game::run(){
 
             currentState->handleEvent(*event);
         }
+
+        currentState->update();
         
         window.clear(sf::Color::White);
         currentState->render(window, interface);
