@@ -8,6 +8,7 @@
 #include <SFML/Graphics.hpp>
 #include <stdexcept>
 #include <iostream>
+#include <algorithm>
 
 
 StarterState::StarterState(Pokemon_Party& party)
@@ -51,9 +52,25 @@ void StarterState::handleEvent(const sf::Event& event)
             {
                 if (sprite->contains(mousePos))
                 {
+                    const auto spriteIterator = std::find(
+                        starterPokemonSprites.begin(),
+                        starterPokemonSprites.end(),
+                        sprite);
+                    const std::size_t spriteIndex = static_cast<std::size_t>(
+                        std::distance(starterPokemonSprites.begin(), spriteIterator));
+                    constexpr std::array<int, 3> starterIds{1, 4, 7};
+                    const Pokemon selectedPokemon =
+                        Pokedex::getInstance(pokedexCSV)->getByIndex(
+                            starterIds.at(spriteIndex));
+
                     isPokemonSelected = true;
                     std::cout << "Pokemon selected!" << std::endl;
-                    
+                    party.addPokemon(selectedPokemon);
+                    std::cout << "Pokemon added to party: "
+                              << selectedPokemon.getName() << std::endl;
+                    party.addPokemonToAttackSet(selectedPokemon);
+                    std::cout << "Pokemon added to attack set: "
+                              << selectedPokemon.getName() << std::endl;
                     break;
                 }
             }

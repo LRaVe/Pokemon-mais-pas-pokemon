@@ -1,4 +1,5 @@
 #include "Game_states/ExplorationState.hpp"
+#include "Game_states/BattleState.hpp"
 
 #include <algorithm>
 #include <iostream>
@@ -7,6 +8,7 @@
 #include "Interface.hpp"
 #include "References.hpp"
 #include "Pokedex.hpp"
+
 
 ExplorationState::ExplorationState(Pokemon_Party& party)
     : bgTexture(), 
@@ -98,6 +100,13 @@ void ExplorationState::handleEvent(const sf::Event& event)
                         std::cout << foundPokemon->getName()
                                   << " added to the party." << std::endl;
                     }
+
+                    if (party.getAttackSetPokemons().size() <6)
+                    {
+                        party.addPokemonToAttackSet(*foundPokemon);
+                        std::cout << foundPokemon->getName()
+                                  << " added to the attack set." << std::endl;
+                    }
                 }
                 else {
                     std::cout << "Capture failed!" << std::endl;
@@ -115,6 +124,7 @@ void ExplorationState::handleEvent(const sf::Event& event)
                 fleeButtonSprite->contains(mousePos))
             {
                 std::cout << "You fled from the Pokemon!" << std::endl;
+                ExploreText.setString("You fled from the Pokemon!");
                 foundPokemonSprite.reset();
                 foundPokemon.reset();
                 hasFoundPokemon = false;
@@ -129,6 +139,8 @@ void ExplorationState::handleEvent(const sf::Event& event)
                 fightButtonSprite->contains(mousePos))
             {
                 std::cout << "You chose to fight the Pokemon!" << std::endl;
+                action(std::make_unique<BattleState>(party, *foundPokemon));
+                return;
                 
             }
         

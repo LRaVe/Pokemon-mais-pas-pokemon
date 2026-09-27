@@ -24,24 +24,13 @@ void Pokemon_Party::removePokemonByName(const string& name){
 }
 
 void Pokemon_Party::addPokemonToAttackSet(const Pokemon& pokemon) {
-    // Ajoute le Pokémon à l'attaque
+    // L'équipe active est un sous-ensemble de l'inventaire.
     this->attackSet.addPokemon(pokemon);
-    // Supprime le Pokémon de la liste principale
-    for (auto it = pokemons.begin(); it != pokemons.end(); ++it) {
-        if (it->getName() == pokemon.getName()) {
-            pokemons.erase(it);
-            return;
-        }
-    }
-    throw std::out_of_range(pokemon.getName() + " is not in the party.");
 }
 
 void Pokemon_Party::removePokemonFromAttackSetByName(const string& name) {
-    // Ajoute le Pokémon de l'attaque à la liste principale
-    pokemons.push_back(this->attackSet.getByName(name));
-    // Supprime le Pokémon de l'attaque
+    // Le Pokémon reste dans l'inventaire lorsqu'il quitte l'équipe active.
     this->attackSet.removePokemonByName(name);
-    
 }
 
 std::vector<Pokemon> Pokemon_Party::getPokemons() const {
@@ -50,4 +39,32 @@ std::vector<Pokemon> Pokemon_Party::getPokemons() const {
 
 std::vector<Pokemon> Pokemon_Party::getAttackSetPokemons() const {
     return attackSet.getPokemons();
+}
+
+Pokemon& Pokemon_Party::getActivePokemon()
+{
+    if (pokemons.empty())
+    {
+        throw std::runtime_error("The party is empty.");
+    }
+
+    return pokemons[activePokemon];
+}
+
+const Pokemon& Pokemon_Party::getActivePokemon() const
+{
+    if (pokemons.empty())
+    {
+        throw std::runtime_error("The party is empty.");
+    }
+
+    return pokemons[activePokemon];
+}
+
+
+void Pokemon_Party::changeActivePokemon(std::size_t index) {
+    if (index >= pokemons.size()) {
+        throw std::out_of_range("Index out of range");
+    }
+    activePokemon = index;
 }
