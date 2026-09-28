@@ -103,12 +103,14 @@ void BattleState::handleEvent(const sf::Event& event)
         else if (fleeButton.value().getGlobalBounds().contains(static_cast<sf::Vector2f>(mousePosition)))
         {
             startDialogue("You chose to flee!");
-            action(std::make_unique<ExplorationState>(party));
+            pendingExploration = true;
+            transitionTimerStarted = false;
+            phase = BattlePhase::Turn;
         }
 
         else if (fightButton.value().getGlobalBounds().contains(static_cast<sf::Vector2f>(mousePosition)))
         {
-            phase = BattlePhase::PlayerTurn;
+            phase = BattlePhase::Turn;
             startDialogue("You chose to fight!");
             executeTurn();
         }
@@ -168,7 +170,7 @@ void BattleState::render(sf::RenderWindow& window, Interface& interface)
 
 void BattleState::update()
 {
-    if (visibleCharacters >= fullText.size())
+    if (dialogueActive && visibleCharacters >= fullText.size())
     {
         if (textClock.getElapsedTime() < sf::seconds(dialoguePause))
         {
@@ -183,25 +185,39 @@ void BattleState::update()
             textClock.restart();
             dialogueText.setString("");
         }
-        return;
+        else if (dialogueQueue.empty())
+        {
+            dialogueActive = false;
+        }
     }
 
-    if (textClock.getElapsedTime() >= sf::seconds(characterDelay))
+    if (dialogueActive && visibleCharacters < fullText.size() &&
+        textClock.getElapsedTime() >= sf::seconds(characterDelay))
     {
         ++visibleCharacters;
         dialogueText.setString(fullText.substr(0, visibleCharacters));
         textClock.restart();
     }
 
-    
-
+    if (pendingExploration && !dialogueActive)
+    {
+        if (!transitionTimerStarted)
+        {
+            transitionClock.restart();
+            transitionTimerStarted = true;
+        }
+        else if (transitionClock.getElapsedTime() >= sf::seconds(transitionDelay))
+        {
+            action(std::make_unique<ExplorationState>(party));
+        }
+    }
 
 }
 
 
 void BattleState::startDialogue(const std::string& text)
 {
-    if (!fullText.empty())
+    if (dialogueActive)
     {
         dialogueQueue.push_back(text);
         return;
@@ -209,52 +225,70 @@ void BattleState::startDialogue(const std::string& text)
 
     fullText = text;
     visibleCharacters = 0;
+    dialogueActive = true;
     textClock.restart();
     dialogueText.setString("");
 }
 
-void BattleState::attackTurn(const std::string& playerAttack, const std::string& opponentAttack)
-{
-    startDialogue("Player used " + playerAttack + "!\nOpponent used " + opponentAttack + "!");
-
-}
 
 
 void BattleState::executeTurn()
 {
-    if (phase != BattlePhase::PlayerTurn && phase != BattlePhase::OpponentTurn)
+    if (phase != BattlePhase::Turn)
     {
         return;
     }
 
-    if (playerPokemon->getAttack() < opponent.getDefense())
+    if (playerPokemon == nullptr)
     {
-        startDialogue(playerPokemon->getName() + "'s attack was \ntoo weak to damage " + opponent.getName() + "!");
-        startDialogue("You can try to choose another\n Pokemon or flee!");
-        phase = BattlePhase::MainMenu;
-        
+        return;
+    }
+
+    const bool playerAttackSucceeded = playerPokemon->canAttack(opponent);
+
+    if (playerAttackSucceeded)
+    {
+        startDialogue("You attacked " + opponent.getName() + "!");
     }
     else
     {
-
-    if (playerPokemon == nullptr || playerPokemon->getHitPoint() <= 1)
-    {
-        phase = BattlePhase::Defeat;
-        startDialogue("You lost the battle!");
-        return;
+        startDialogue(playerPokemon->getName() + "'s attack was \ntoo weak to damage " + opponent.getName() + "!");
     }
 
-    playerPokemon->canAttack(opponent);
+    if (playerPokemon->getHitPoint() <= 1)
+    {
+        startDialogue("You lost the battle!");
+        startDialogue("The wild " + opponent.getName() + " has fled!");
+        pendingExploration = true;
+        transitionTimerStarted = false;
+        return;
+    }
 
     if (opponent.getHitPoint() <= 1)
     {
-        phase = BattlePhase::Victory;
         startDialogue("You won the battle!");
+        pendingExploration = true;
+        transitionTimerStarted = false;
         return;
     }
 
-    opponent.canAttack(*playerPokemon);
+    if (opponent.canAttack(*playerPokemon) == false)
+    {
+        startDialogue(opponent.getName() + "'s attack was \ntoo weak to damage " + playerPokemon->getName() + "!");
+    }
+    else
+    {   
+        startDialogue(opponent.getName() + " attacked you!");
 
+    }
+
+    if (playerPokemon->getHitPoint() <= 1)
+    {
+        startDialogue("You lost the battle!");
+        startDialogue("The wild " + opponent.getName() + " has fled!");
+        pendingExploration = true;
+        transitionTimerStarted = false;
+        return;
     }
 
     phase = BattlePhase::MainMenu;

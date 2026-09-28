@@ -14,11 +14,8 @@ enum class BattlePhase
 {
     MainMenu,
     ChoosingPokemon,
-    PlayerTurn,
-    OpponentTurn,
-    Victory,
-    Defeat,
-    Flee
+    Turn
+
 };
 
 class BattleState final : public GameState
@@ -33,11 +30,16 @@ private:
     sf::Font font;
     sf::Text dialogueText;
     sf::Clock textClock;
+    sf::Clock transitionClock;
     std::string fullText;
     std::deque<std::string> dialogueQueue;
     std::size_t visibleCharacters = 0;
     float characterDelay = 0.05f; 
     float dialoguePause = 1.5f;
+    float transitionDelay = 0.1f;
+    bool dialogueActive = false;
+    bool pendingExploration = false;
+    bool transitionTimerStarted = false;
     std::optional<Button> fleeButton;
     std::optional<Button> fightButton;
     std::optional<Button> pokemonButton;
@@ -52,7 +54,6 @@ public:
     void update() override;
 
     void startDialogue(const std::string& text);
-    void attackTurn(const std::string& playerAttack, const std::string& opponentAttack);
     void executeTurn();
     void choosePokemon(std::size_t index);
 };

@@ -38,7 +38,6 @@ set(SOURCES
     Src/Game_states/PokedexState.cpp
     Src/Game_states/PartyState.cpp
     Src/Game_states/BattleState.cpp
-    Src/Game_states/ExitState.cpp
     Src/Game_states/ExplorationState.cpp
     Src/GameSprite.cpp
     Src/Button.cpp

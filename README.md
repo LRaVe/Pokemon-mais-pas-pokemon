@@ -15,6 +15,57 @@ Ce projet est une première introduction au langage C++. Il s'agit d'un jeu s'in
 - `Pokemon_Party` : hérite de `SetOfPokemon` et représente l'ensemble des pokemons du joueur. Elle possède également un `Pokemon_Attack` pour les Pokémons actuellement en attaque.
 - `Pokemon_Attack` : hérite de `SetOfPokemon` et représente l’ensemble des Pokémons placés en attaque, avec une limite de six Pokémons.
 
+## Diagramme de classes
+
+```mermaid
+classDiagram
+  class Pokemon {
+    -int id
+    -string name
+    -double hitPoint
+    -double attack
+    -double defense
+    -int generation
+    +canAttack(Pokemon target) bool
+    +damage(Pokemon target) void
+  }
+
+  class SetOfPokemon {
+    #vector~Pokemon~ pokemons
+    +getByIndex(int index) Pokemon
+    +getByName(string name) Pokemon
+    +displayAllPokemons() void
+  }
+
+  class Pokedex {
+    -Pokedex* instance
+    +getInstance(string fileName) Pokedex*
+    +getByPosition(size_t position) Pokemon
+    +getTotalPokemon() int
+  }
+
+  class Pokemon_Party {
+    -Pokemon_Attack attackSet
+    -size_t activePokemon
+    +addPokemon(Pokemon pokemon) void
+    +changeActivePokemon(size_t index) void
+    +getActivePokemon() Pokemon
+  }
+
+  class Pokemon_Attack {
+    -const int maxPokemon = 6
+    +addPokemon(Pokemon pokemon) void
+    +removePokemonByName(string name) bool
+  }
+
+  SetOfPokemon <|-- Pokedex
+  SetOfPokemon <|-- Pokemon_Party
+  SetOfPokemon <|-- Pokemon_Attack
+  SetOfPokemon "1" o-- "0..*" Pokemon : contient
+  Pokemon_Party *-- "1" Pokemon_Attack : possède
+  Pokedex "1" --> "1" Pokedex : singleton
+```
+
 ## Interface Graphique
 
 Cette étape n'est qu'en développement pour l'instant, lors de l'execution, fermez la fenêtre pour voir le programme dans le CLI.

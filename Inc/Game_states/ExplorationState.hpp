@@ -32,6 +32,7 @@ private:
     std::optional<Button> captureButtonSprite;
     std::optional<Button> fleeButtonSprite;
     std::optional<Button> fightButtonSprite;
+    std::optional<Button> PartyButtonSprite;
 
     Pokemon_Party& party;
 public:
