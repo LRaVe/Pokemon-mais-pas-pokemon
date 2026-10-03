@@ -76,3 +76,10 @@ void Pokemon::damage(Pokemon& target) const{
     
 }
 
+bool Pokemon::getIsAbleToFight() const {
+    return isAbleToFight;
+}
+
+void Pokemon::setIsAbleToFight(const bool &isAbleToFight) {
+    this->isAbleToFight = isAbleToFight;
+}

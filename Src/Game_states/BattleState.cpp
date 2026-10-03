@@ -17,9 +17,12 @@ BattleState::BattleState(
         textBoxSprite("Ressources/textBoxWithBg.png"),
         font(PokemonFont),
         dialogueText(font, "", 32),
+        playerInfoText(font, "", 28),
+        opponentInfoText(font, "", 28),
         fullText(),
         visibleCharacters(0),
-        characterDelay(0.05f)
+        characterDelay(0.05f),
+        isDoingSmth(false)
 {
 
     
@@ -31,6 +34,10 @@ BattleState::BattleState(
     }
     dialogueText.setFillColor(sf::Color::Black);
     dialogueText.setPosition({100.f, 600.f});
+    playerInfoText.setFillColor(sf::Color::Black);
+    playerInfoText.setPosition({40.f, 300.f});
+    opponentInfoText.setFillColor(sf::Color::Black);
+    opponentInfoText.setPosition({1240.f, 300.f});
 
     fleeButton.emplace("Ressources/FleeButton.png", font, "Flee", 32);
     fightButton.emplace("Ressources/FightButton.png", font, "Fight", 32);
@@ -86,6 +93,11 @@ void BattleState::handleEvent(const sf::Event& event)
         return;
     }
 
+    if (inputLocked)
+    {
+        return;
+    }
+
     sf::Vector2i mousePosition(
         static_cast<int>(mouseEvent->position.x),
         static_cast<int>(mouseEvent->position.y)
@@ -98,6 +110,7 @@ void BattleState::handleEvent(const sf::Event& event)
         {
             startDialogue("Choose a Pokemon!");
             phase = BattlePhase::ChoosingPokemon;
+            isDoingSmth = true;
         }
 
         else if (fleeButton.value().getGlobalBounds().contains(static_cast<sf::Vector2f>(mousePosition)))
@@ -105,6 +118,8 @@ void BattleState::handleEvent(const sf::Event& event)
             startDialogue("You chose to flee!");
             pendingExploration = true;
             transitionTimerStarted = false;
+            isDoingSmth = true;
+            inputLocked = true;
             phase = BattlePhase::Turn;
         }
 
@@ -112,6 +127,8 @@ void BattleState::handleEvent(const sf::Event& event)
         {
             phase = BattlePhase::Turn;
             startDialogue("You chose to fight!");
+            isDoingSmth = true;
+            inputLocked = true;
             executeTurn();
         }
     }
@@ -136,8 +153,24 @@ void BattleState::render(sf::RenderWindow& window, Interface& interface)
 {
     interface.render(window);
 
+    
+
     if (phase != BattlePhase::ChoosingPokemon)
     {
+        playerInfoText.setString(
+        "Player\n" + playerPokemon->getName() +
+        "\nHP: " + std::to_string(static_cast<int>(playerPokemon->getHitPoint())) +
+        "\nAttack: " + std::to_string(static_cast<int>(playerPokemon->getAttack())) +
+        "\nDefense: " + std::to_string(static_cast<int>(playerPokemon->getDefense())));
+        opponentInfoText.setString(
+        "Wild Pokemon\n" + opponent.getName() +
+        "\nHP: " + std::to_string(static_cast<int>(opponent.getHitPoint())) +
+        "\nAttack: " + std::to_string(static_cast<int>(opponent.getAttack())) +
+        "\nDefense: " + std::to_string(static_cast<int>(opponent.getDefense())));
+        window.draw(playerInfoText);
+        window.draw(opponentInfoText);
+
+
         activePokemonSprite->setScale({-3.f, 3.f});
         activePokemonSprite->setPosition({650.f, 250.f});
         activePokemonSprite->draw(window);
@@ -147,7 +180,7 @@ void BattleState::render(sf::RenderWindow& window, Interface& interface)
         opponentSprite.draw(window);
         
 
-        if (phase == BattlePhase::MainMenu)
+        if (phase == BattlePhase::MainMenu && !isDoingSmth)
         {
             fightButton->draw(window);
             fleeButton->draw(window);
@@ -188,6 +221,12 @@ void BattleState::update()
         else if (dialogueQueue.empty())
         {
             dialogueActive = false;
+
+            if (phase == BattlePhase::MainMenu && !pendingExploration)
+            {
+                isDoingSmth = false;
+                inputLocked = false;
+            }
         }
     }
 
@@ -298,6 +337,7 @@ void BattleState::executeTurn()
 
 void BattleState::choosePokemon(std::size_t index)
 {
+    
     const auto attackPokemons = party.getAttackSetPokemons();
     const auto inventoryPokemons = party.getPokemons();
 
@@ -320,6 +360,8 @@ void BattleState::choosePokemon(std::size_t index)
             activePokemonSprite->setPosition({650.f, 250.f});
             startDialogue("You chose " + playerPokemon->getName() + "!");
             phase = BattlePhase::MainMenu;
+            isDoingSmth = true;
+            inputLocked = true;
             return;
         }
     }

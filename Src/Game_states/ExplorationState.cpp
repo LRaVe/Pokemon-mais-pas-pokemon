@@ -1,8 +1,8 @@
 #include "Game_states/ExplorationState.hpp"
 #include "Game_states/BattleState.hpp"
+#include "Game_states/PartyState.hpp"
 
 #include <algorithm>
-#include <iostream>
 #include <random>
 
 #include "Interface.hpp"
@@ -16,6 +16,7 @@ ExplorationState::ExplorationState(Pokemon_Party& party)
     ExploreText(font, "Searching...",50), 
     hasFoundPokemon(false), 
     searchClock(), 
+    captureGenerator(std::random_device{}()),
     isSearching(false),
     party(party)
 {
@@ -44,13 +45,18 @@ ExplorationState::ExplorationState(Pokemon_Party& party)
         "Ressources/FleeButton.png", font, "Flee", 50);
     fightButtonSprite.emplace(
         "Ressources/FightButton.png", font, "Fight", 50);
+    partyButtonSprite.emplace(
+        "Ressources/PokemonButton.png", font,"Party", 50
+    );
 
     captureButtonSprite->setPosition({1300.f, 300.f});
     captureButtonSprite->setScale({0.5f, 0.5f});
     fightButtonSprite->setPosition({1300.f, 500.f});
-    fightButtonSprite->setScale({0.5f, 0.5f});
+    fightButtonSprite->setScale({0.5f, 0.5f}); 
     fleeButtonSprite->setPosition({1300.f, 700.f});
     fleeButtonSprite->setScale({0.5f, 0.5f});
+    partyButtonSprite->setPosition({0.0f,700.0f});
+    partyButtonSprite->setScale({0.5f,0.5f});
 
 
     ExploreText.setFillColor(sf::Color::Black);
@@ -78,7 +84,8 @@ void ExplorationState::handleEvent(const sf::Event& event)
                 !isCaptured &&
                 captureButtonSprite->contains(mousePos))
             {
-                int randomChance = std::rand() % 100; // Random number between 0 and 99
+                std::uniform_int_distribution<int> captureChance(0, 99);
+                const int randomChance = captureChance(captureGenerator);
                 if (randomChance < 50) { // 50% chance to capture
                     std::cout << "Pokemon captured!" << std::endl;
                     party.addPokemon(*foundPokemon);
@@ -143,6 +150,13 @@ void ExplorationState::handleEvent(const sf::Event& event)
                 return;
                 
             }
+
+            if (partyButtonSprite->contains(mousePos))
+            {
+                std::cout << "You opened the party!" << std::endl;
+                action(std::make_unique<PartyState>(party));
+                return;
+            }
         
         }
 
@@ -166,6 +180,7 @@ void ExplorationState::render(sf::RenderWindow& window, Interface& interface)
         captureButtonSprite->draw(window);
         fleeButtonSprite->draw(window);
         fightButtonSprite->draw(window);
+        partyButtonSprite->draw(window);
     }
 }
 

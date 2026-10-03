@@ -29,6 +29,8 @@ private:
     std::optional<GameSprite> activePokemonSprite;
     sf::Font font;
     sf::Text dialogueText;
+    sf::Text playerInfoText;
+    sf::Text opponentInfoText;
     sf::Clock textClock;
     sf::Clock transitionClock;
     std::string fullText;
@@ -45,6 +47,8 @@ private:
     std::optional<Button> pokemonButton;
     std::vector<GameSprite> attackPokemonSprites;
     BattlePhase phase = BattlePhase::MainMenu;
+    bool isDoingSmth = false;
+    bool inputLocked = true;
 
 public:
     BattleState(Pokemon_Party& party, const Pokemon& opponent);

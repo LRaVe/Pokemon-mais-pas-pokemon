@@ -14,7 +14,7 @@ class Pokemon {
         int generation;
         static int nbPokemon;
         string imagePath;
-        bool isAlive() const;
+        bool isAbleToFight=true;
     public:
         Pokemon()=delete;
         Pokemon(const int &id, const string &name, const double &hitPoint, const double &attack, const double &defense, const int &generation);
@@ -30,6 +30,8 @@ class Pokemon {
         int getGeneration() const;
         int getNbPokemon() const;
         string getImagePath() const;
+        bool getIsAbleToFight() const;
+        void setIsAbleToFight(const bool &isAbleToFight);
 
         void displayInfo() const;
 

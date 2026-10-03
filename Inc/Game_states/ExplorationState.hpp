@@ -9,6 +9,7 @@
 
 #include <SFML/Graphics.hpp>
 #include <optional>
+#include <random>
 
 class ExplorationState final : public GameState
 {
@@ -21,6 +22,7 @@ private:
 
     sf::Clock searchClock;
     sf::Clock nextSearchClock;
+    std::mt19937 captureGenerator;
     bool isSearching = false;
     bool hasFoundPokemon = false;
     bool isCaptured = false;
@@ -32,7 +34,7 @@ private:
     std::optional<Button> captureButtonSprite;
     std::optional<Button> fleeButtonSprite;
     std::optional<Button> fightButtonSprite;
-    std::optional<Button> PartyButtonSprite;
+    std::optional<Button> partyButtonSprite;
 
     Pokemon_Party& party;
 public:

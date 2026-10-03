@@ -16,7 +16,7 @@ Game::Game()
       party(),
       window(),
       interface(),
-      currentState(std::make_unique<StarterState>(party))
+      currentState(std::make_unique<TitleState>(party))
 {
     currentState->setAction([this](std::unique_ptr<GameState> newState) {
         this->changeState(std::move(newState));
