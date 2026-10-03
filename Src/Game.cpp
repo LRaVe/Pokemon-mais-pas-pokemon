@@ -25,7 +25,7 @@ Game::Game()
 
     window.create(sf::VideoMode({1600, 900}),
     "Pokemon",
-    sf::Style::Default,
+    sf::Style::Titlebar | sf::Style::Close,
     sf::State::Windowed);
 
     

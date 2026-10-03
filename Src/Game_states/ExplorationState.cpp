@@ -63,7 +63,7 @@ ExplorationState::ExplorationState(Pokemon_Party& party)
     ExploreText.setFont(font);
     ExploreText.setCharacterSize(50);
     ExploreText.setString("Searching...");
-    ExploreText.setPosition({300.f, 200.f});
+    ExploreText.setPosition({600.f, 200.f});
 
     search();
 }
@@ -92,6 +92,7 @@ void ExplorationState::handleEvent(const sf::Event& event)
                     isCaptured = true;
                     ExploreText.setString("Pokemon captured!");
                     ExploreText.setFillColor(sf::Color::Blue);
+                    ExploreText.setPosition({550.f, 200.f});
 
                     const auto partyPokemons = party.getPokemons();
                     const bool wasAdded = std::any_of(
@@ -119,6 +120,7 @@ void ExplorationState::handleEvent(const sf::Event& event)
                     std::cout << "Capture failed!" << std::endl;
                     ExploreText.setString("Capture failed!");
                     ExploreText.setFillColor(sf::Color::Red);
+                    ExploreText.setPosition({600.f, 200.f});
                 }
 
                 hasFoundPokemon = false;
@@ -216,6 +218,7 @@ void ExplorationState::search()
     searchClock.restart();
     ExploreText.setString("Searching...");
     ExploreText.setFillColor(sf::Color::Black);
+    ExploreText.setPosition({600.f, 200.f});
 }
 
 void ExplorationState::update()
@@ -224,6 +227,7 @@ void ExplorationState::update()
     {
         if (nextSearchClock.getElapsedTime() >= sf::seconds(2.f))
         {
+  
             foundPokemonSprite.reset();
             foundPokemon.reset();
             isCaptured = false;
@@ -254,7 +258,8 @@ void ExplorationState::update()
             "You found a wild Pokemon : " + foundPokemon->getName());
         std::cout << "You found a wild Pokemon: "
                   << foundPokemon->getName() << std::endl;
-        ExploreText.setFillColor(sf::Color::Green);
+        ExploreText.setFillColor(sf::Color::Black);
+        ExploreText.setPosition({300.f, 200.f});
     }
     catch (const std::exception& error)
     {

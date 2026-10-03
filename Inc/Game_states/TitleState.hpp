@@ -9,6 +9,8 @@
 class TitleState final : public GameState
 {
 private: 
+    sf::Texture bgTexture;
+    sf::Sprite bgSprite;
     sf::Font font;
     sf::Text titleText;
     std::optional<Button> startButton;

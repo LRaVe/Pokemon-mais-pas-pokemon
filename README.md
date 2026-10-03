@@ -66,9 +66,62 @@ classDiagram
   Pokedex "1" --> "1" Pokedex : singleton
 ```
 
-## Interface Graphique
+### États du jeu
 
-Cette étape n'est qu'en développement pour l'instant, lors de l'execution, fermez la fenêtre pour voir le programme dans le CLI.
+```mermaid
+classDiagram
+  class Game {
+    -Pokemon_Party party
+    -unique_ptr~GameState~ currentState
+    +changeState(unique_ptr~GameState~ state) void
+    +run() void
+  }
+
+  class GameState {
+    <<abstract>>
+    +handleEvent(Event event) void
+    +render(RenderWindow window, Interface interface) void
+    +update() void
+  }
+
+  class TitleState
+  class StarterState
+  class ExplorationState
+  class BattleState
+  class PartyState
+
+  Game *-- GameState : état courant
+  GameState <|-- TitleState
+  GameState <|-- StarterState
+  GameState <|-- ExplorationState
+  GameState <|-- BattleState
+  GameState <|-- PartyState
+
+
+  TitleState --> StarterState : Start
+  StarterState --> ExplorationState : choix du starter
+  ExplorationState --> BattleState : Fight
+  ExplorationState --> PartyState : Party
+  BattleState --> ExplorationState : fin du combat / Flee
+  PartyState --> ExplorationState : retour
+```
+
+### State machine
+
+```mermaid
+stateDiagram-v2
+  [*] --> TitleState
+  TitleState --> StarterState : Start
+  StarterState --> ExplorationState : starter choisi
+  ExplorationState --> ExplorationState : recherche / capture / fuite
+  ExplorationState --> BattleState : Fight
+  ExplorationState --> PartyState : Party
+  BattleState --> BattleState : Fight / choix du Pokemon
+  BattleState --> ExplorationState : victoire, défaite ou fuite
+  PartyState --> ExplorationState : retour
+  ExplorationState --> [*] : fermeture de la fenêtre
+```
+
 
 ## Comment build le projet
 
@@ -82,3 +135,48 @@ Puis
 
 Et lancer le programme : 
 ```Pokemon.exe```
+
+## Installation sous Linux
+
+### Prérequis
+
+Sur Debian, Ubuntu ou une distribution compatible :
+
+```bash
+sudo apt update
+sudo apt install build-essential cmake libsfml-dev
+```
+
+Le projet utilise C++20 et SFML. Si la version SFML fournie par la distribution
+n'est pas compatible, installer vcpkg :
+
+```bash
+git clone https://github.com/microsoft/vcpkg.git
+./vcpkg/bootstrap-vcpkg.sh
+```
+
+### Compilation et installation
+
+Depuis la racine du projet :
+
+```bash
+cmake -S . -B build-linux -DCMAKE_BUILD_TYPE=Release
+cmake --build build-linux -j
+cmake --install build-linux --prefix "$HOME/.local"
+```
+
+L'exécutable installé se trouve dans `~/.local/bin/Pokemon` et les ressources
+dans `~/.local/bin/Ressources`. Pour l'exécuter :
+
+```bash
+cd "$HOME/.local/bin"
+./Pokemon
+```
+
+Avec vcpkg, utiliser cette configuration :
+
+```bash
+cmake -S . -B build-linux \
+  -DCMAKE_BUILD_TYPE=Release \
+  -DCMAKE_TOOLCHAIN_FILE="$HOME/vcpkg/scripts/buildsystems/vcpkg.cmake"
+```

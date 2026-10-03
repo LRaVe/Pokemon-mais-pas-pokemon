@@ -3,3 +3,4 @@
 #define GoldyBurst "Ressources/Fonts/Goldy Burst.ttf"
 #define PokemonFont "Ressources/Fonts/Pokemon Classic.ttf"
 #define ExploreBackground "Ressources/background.jpeg"
+#define TitleBackground "Ressources/titleBg.jpg"
