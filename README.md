@@ -180,3 +180,41 @@ cmake -S . -B build-linux \
   -DCMAKE_BUILD_TYPE=Release \
   -DCMAKE_TOOLCHAIN_FILE="$HOME/vcpkg/scripts/buildsystems/vcpkg.cmake"
 ```
+
+## Installation sous macOS
+
+### Prérequis
+
+Installer les outils de compilation Apple et Homebrew :
+
+```bash
+xcode-select --install
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+brew install cmake sfml
+```
+
+Le projet utilise C++20. Depuis la racine du projet, configurer CMake en
+indiquant le chemin d'installation de SFML fourni par Homebrew :
+
+```bash
+cmake -S . -B build-macos \
+  -DCMAKE_BUILD_TYPE=Release \
+  -DCMAKE_PREFIX_PATH="$(brew --prefix sfml)"
+cmake --build build-macos -j
+```
+
+L'exécutable se trouve dans `build-macos/Pokemon`. Pour lancer le jeu :
+
+```bash
+./build-macos/Pokemon
+```
+
+Si SFML est installé avec vcpkg, remplacer la configuration précédente par :
+
+```bash
+cmake -S . -B build-macos \
+  -DCMAKE_BUILD_TYPE=Release \
+  -DCMAKE_TOOLCHAIN_FILE="$HOME/vcpkg/scripts/buildsystems/vcpkg.cmake"
+cmake --build build-macos -j
+./build-macos/Pokemon
+```
