@@ -50,6 +50,7 @@ void Pokemon::displayInfo() const {
     std::cout << "Generation: " << generation << std::endl;
 }
 
+// Une attaque ne réussit que si elle dépasse la défense de la cible.
 bool Pokemon::canAttack(Pokemon& target) const {
     if (attack > target.defense)
     {
@@ -62,6 +63,7 @@ bool Pokemon::canAttack(Pokemon& target) const {
     }
 }
 
+// Applique les dégâts en conservant au moins un point de vie à la cible.
 void Pokemon::damage(Pokemon& target) const{
     target.hitPoint -= (attack - target.defense);
     if (target.getHitPoint() < 1)
@@ -80,6 +82,6 @@ bool Pokemon::getIsAbleToFight() const {
     return isAbleToFight;
 }
 
-void Pokemon::setIsAbleToFight(const bool &isAbleToFight) {
-    this->isAbleToFight = isAbleToFight;
+void Pokemon::setIsAbleToFight(const bool &ableToFight) {
+    this->isAbleToFight = ableToFight;
 }

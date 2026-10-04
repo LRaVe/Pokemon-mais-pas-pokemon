@@ -68,6 +68,7 @@ ExplorationState::ExplorationState(Pokemon_Party& party)
     search();
 }
 
+// Traite les choix du joueur après une rencontre et déclenche l'état correspondant.
 void ExplorationState::handleEvent(const sf::Event& event)
 {
     if (const auto* mouseButton = event.getIf<sf::Event::MouseButtonPressed>())
@@ -186,6 +187,7 @@ void ExplorationState::render(sf::RenderWindow& window, Interface& interface)
     }
 }
 
+// Sélectionne un Pokémon à partir d'un index aléatoire du Pokédex.
 Pokemon ExplorationState::picKRandomPokemon() const
 {
     Pokedex* pokedex = Pokedex::getInstance(pokedexCSV);
@@ -221,6 +223,7 @@ void ExplorationState::search()
     ExploreText.setPosition({600.f, 200.f});
 }
 
+// Synchronise les délais de recherche, de rencontre et de relance d'exploration.
 void ExplorationState::update()
 {
     if (isWaitingForNextSearch)

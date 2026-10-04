@@ -38,6 +38,7 @@ StarterState::StarterState(Pokemon_Party& party)
     ChooseText.setPosition({328.f, 250.f});
 }
 
+// Détecte le starter sélectionné, l'ajoute à la partie, puis passe à l'exploration.
 void StarterState::handleEvent(const sf::Event& event)
 {
     if (const auto* mouseButton = event.getIf<sf::Event::MouseButtonPressed>())

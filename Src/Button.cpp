@@ -24,6 +24,7 @@ void Button::setScale(sf::Vector2f scale)
     centerText();
 }
 
+// Recalcule l'origine et la position pour garder le texte centré sur le bouton.
 void Button::centerText()
 {
     const sf::FloatRect buttonBounds = getGlobalBounds();

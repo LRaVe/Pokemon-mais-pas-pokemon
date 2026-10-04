@@ -78,6 +78,7 @@ BattleState::BattleState(
     startDialogue("A wild Pokemon appeared!");
 }
 
+// Filtre les clics selon la phase du combat et applique l'action choisie.
 void BattleState::handleEvent(const sf::Event& event)
 {
     if (phase != BattlePhase::MainMenu && phase != BattlePhase::ChoosingPokemon)
@@ -201,6 +202,7 @@ void BattleState::render(sf::RenderWindow& window, Interface& interface)
     window.draw(dialogueText);
 }
 
+// Anime les dialogues, débloque les commandes et gère la transition après le combat.
 void BattleState::update()
 {
     if (dialogueActive && visibleCharacters >= fullText.size())
@@ -271,6 +273,7 @@ void BattleState::startDialogue(const std::string& text)
 
 
 
+// Résout le tour complet : attaque du joueur, résultat, puis riposte adverse.
 void BattleState::executeTurn()
 {
     if (phase != BattlePhase::Turn)
@@ -335,6 +338,7 @@ void BattleState::executeTurn()
 }
 
 
+// Remplace le Pokémon actif par celui choisi dans l'équipe d'attaque.
 void BattleState::choosePokemon(std::size_t index)
 {
     

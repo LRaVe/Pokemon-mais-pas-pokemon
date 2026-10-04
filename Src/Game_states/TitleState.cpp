@@ -67,5 +67,4 @@ void TitleState::render(sf::RenderWindow& window, Interface& interface)
 
 void TitleState::update()
 {
-    // No specific update logic for the title state
 }

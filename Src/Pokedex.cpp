@@ -8,6 +8,7 @@
 
 Pokedex* Pokedex::instance = nullptr;
 
+// Lit le CSV ligne par ligne et convertit chaque entrée en objet Pokemon.
 Pokedex::Pokedex(const std::string& fileName):SetOfPokemon() {
 
     std::cout << "*** Constructeur du Pokedex ***" << std::endl;

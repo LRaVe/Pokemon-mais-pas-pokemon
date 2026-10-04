@@ -4,6 +4,7 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 
+// Charge la texture et l'associe au sprite avant toute utilisation.
 GameSprite::GameSprite(const std::string& imagePath) : texture(), sprite(texture) {
     if (!texture.loadFromFile(imagePath)) {
         throw std::runtime_error("Failed to load texture from " + imagePath);
@@ -36,6 +37,7 @@ bool GameSprite::contains(sf::Vector2f point) const {
     return sprite.getGlobalBounds().contains(point);
 }
 
+// Dessine la surbrillance éventuelle, puis le sprite par-dessus.
 void GameSprite::draw(sf::RenderWindow& window) {
     if (isHighlighted) {
         // Draw a highlight rectangle behind the sprite

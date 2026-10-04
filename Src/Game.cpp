@@ -41,6 +41,7 @@ const GameState& Game::getCurrentState() const {
     return *currentState;
 }
 
+// Remplace l'état courant et reconnecte son callback de transition au jeu.
 void Game::changeState(std::unique_ptr<GameState> state) {
     currentState = std::move(state);
     currentState->setAction([this](std::unique_ptr<GameState> newState) {
@@ -48,6 +49,7 @@ void Game::changeState(std::unique_ptr<GameState> state) {
     });
 }
 
+// Exécute la boucle principale : événements, mise à jour, puis affichage.
 void Game::run(){
     while (window.isOpen()) {
         while (const std::optional event = window.pollEvent()) {
